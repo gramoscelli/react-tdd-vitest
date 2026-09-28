@@ -5,6 +5,7 @@ type Task = { id: number; text: string; done: boolean };
 type TodoContextType = {
   tasks: Task[];
   addTask: (text: string) => void;
+  toggleTask: (id: number) => void;
   loadInitialTasks: (tasks: Task[]) => void;
 };
 
@@ -17,12 +18,20 @@ export function TodoProvider({ children }: { children: ReactNode }) {
     setTasks(prev => [...prev, { id: Date.now(), text, done: false }]);
   }, []);
 
+  const toggleTask = useCallback((id: number) => {
+    setTasks(prev =>
+      prev.map(task =>
+        task.id === id ? { ...task, done: !task.done } : task
+      )
+    );
+  }, []);
+
   const loadInitialTasks = useCallback((initialTasks: Task[]) => {
     setTasks(initialTasks);
   }, []);
 
   return (
-    <TodoContext.Provider value={{ tasks, addTask, loadInitialTasks }}>
+    <TodoContext.Provider value={{ tasks, addTask, toggleTask, loadInitialTasks }}>
       {children}
     </TodoContext.Provider>
   );

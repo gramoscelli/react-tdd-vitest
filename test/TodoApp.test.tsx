@@ -39,3 +39,34 @@ describe('TodoApp - Agregar tareas', () => {
     expect(screen.getByText('Tarea desde API 1')).toBeInTheDocument();
   });
 });
+
+// 4.3 Tercer Ciclo TDD: Marcar tareas como completadas
+describe('TodoApp - Marcar como completada', () => {
+  it('tacha la tarea al hacer clic', async () => {
+    const user = userEvent.setup();
+    render(
+      <TodoProvider>
+        <TodoApp />
+      </TodoProvider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Tarea desde API 1')).toBeInTheDocument();
+    });
+
+    const input = screen.getByPlaceholderText('Nueva tarea');
+    const button = screen.getByText('Agregar');
+
+    await user.type(input, 'Estudiar React');
+    await user.click(button);
+
+    const tarea = screen.getByText('Estudiar React');
+    expect(tarea).toHaveStyle('text-decoration: none');
+
+    await user.click(tarea);
+    expect(tarea).toHaveStyle('text-decoration: line-through');
+
+    await user.click(tarea);
+    expect(tarea).toHaveStyle('text-decoration: none');
+  });
+});
