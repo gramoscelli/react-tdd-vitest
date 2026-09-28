@@ -1,5 +1,12 @@
+import { TodoProvider } from './TodoContext'
+import TodoApp from './TodoApp'
+
 function App() {
-  return <h1>react-tdd-vitest</h1>
+  return (
+    <TodoProvider>
+      <TodoApp />
+    </TodoProvider>
+  )
 }
 
 export default App
