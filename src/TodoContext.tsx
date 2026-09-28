@@ -1,18 +1,28 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode, useCallback } from 'react';
 
 type Task = { id: number; text: string; done: boolean };
 
 type TodoContextType = {
   tasks: Task[];
+  addTask: (text: string) => void;
+  loadInitialTasks: (tasks: Task[]) => void;
 };
 
 const TodoContext = createContext<TodoContextType | undefined>(undefined);
 
 export function TodoProvider({ children }: { children: ReactNode }) {
-  const [tasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
+
+  const addTask = useCallback((text: string) => {
+    setTasks(prev => [...prev, { id: Date.now(), text, done: false }]);
+  }, []);
+
+  const loadInitialTasks = useCallback((initialTasks: Task[]) => {
+    setTasks(initialTasks);
+  }, []);
 
   return (
-    <TodoContext.Provider value={{ tasks }}>
+    <TodoContext.Provider value={{ tasks, addTask, loadInitialTasks }}>
       {children}
     </TodoContext.Provider>
   );
