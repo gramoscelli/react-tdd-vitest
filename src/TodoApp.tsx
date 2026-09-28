@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTodos } from './TodoContext';
 
 export default function TodoApp() {
-  const { tasks, addTask, toggleTask, loadInitialTasks } = useTodos();
+  const { tasks, addTask, toggleTask, deleteTask, loadInitialTasks } = useTodos();
   const [inputValue, setInputValue] = useState('');
 
   useEffect(() => {
@@ -37,15 +37,17 @@ export default function TodoApp() {
       ) : (
         <ul>
           {tasks.map((task) => (
-            <li
-              key={task.id}
-              onClick={() => toggleTask(task.id)}
-              style={{
-                textDecoration: task.done ? 'line-through' : 'none',
-                cursor: 'pointer',
-              }}
-            >
-              {task.text}
+            <li key={task.id}>
+              <span
+                onClick={() => toggleTask(task.id)}
+                style={{
+                  textDecoration: task.done ? 'line-through' : 'none',
+                  cursor: 'pointer',
+                }}
+              >
+                {task.text}
+              </span>
+              <button onClick={() => deleteTask(task.id)}>Borrar</button>
             </li>
           ))}
         </ul>

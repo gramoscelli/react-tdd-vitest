@@ -70,3 +70,25 @@ describe('TodoApp - Marcar como completada', () => {
     expect(tarea).toHaveStyle('text-decoration: none');
   });
 });
+
+// 4.4 Cuarto Ciclo TDD: Borrar tareas
+describe('TodoApp - Borrar tarea', () => {
+  it('elimina la tarea al hacer clic en Borrar', async () => {
+    const user = userEvent.setup();
+    render(
+      <TodoProvider>
+        <TodoApp />
+      </TodoProvider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Tarea desde API 1')).toBeInTheDocument();
+    });
+
+    const botonesBorrar = screen.getAllByText('Borrar');
+    await user.click(botonesBorrar[0]);
+
+    expect(screen.queryByText('Tarea desde API 1')).not.toBeInTheDocument();
+    expect(screen.getByText('Tarea desde API 2')).toBeInTheDocument();
+  });
+});
