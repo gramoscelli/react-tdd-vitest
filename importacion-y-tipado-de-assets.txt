@@ -1,0 +1,29 @@
+Importación y Tipado de Assets en React + TypeScript + Vite
+============================================================
+
+Cuando importás un archivo que no es código (imágenes, SVGs, fuentes, etc.)
+en un proyecto Vite con TypeScript, necesitás que TypeScript entienda qué
+tipo tiene esa importación. De lo contrario, el compilador lanza un error
+porque no sabe qué es un ".png" o un ".svg".
+
+Vite resuelve esto con el archivo de tipos "vite/client", que declara
+módulos para extensiones comunes. Al incluir:
+
+  "types": ["vite/client"]
+
+en tu tsconfig.app.json (dentro de compilerOptions), TypeScript reconoce
+importaciones como:
+
+  import logo from './assets/logo.png';    // tipo: string (URL del asset)
+  import icon from './assets/icon.svg';    // tipo: string (URL del asset)
+
+Vite transforma estos imports en URLs que apuntan al archivo procesado
+durante el build. En tu componente, los usás directamente:
+
+  <img src={logo} alt="Logo" />
+
+Sin esa declaración de tipos, TypeScript marca el import como error:
+"Cannot find module './assets/logo.png' or its corresponding type declarations."
+
+En resumen: Vite se encarga de procesar los assets, y "vite/client"
+le dice a TypeScript que esos imports devuelven un string con la URL.
